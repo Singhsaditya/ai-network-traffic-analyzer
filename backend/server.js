@@ -11,13 +11,17 @@ app.get("/analyze", (req, res) => {
 
     try {
 
-        const filePath = path.join(__dirname, "../data/network_logs.csv");
+        const filePath = path.resolve(__dirname, "../data/network_logs.csv");
+
+        if (!fs.existsSync(filePath)) {
+            return res.status(500).send("CSV file not found on server");
+        }
 
         const file = fs.readFileSync(filePath, "utf8");
 
         const rows = file.trim().split("\n");
 
-        const total = rows.length - 1; // remove header
+        const total = rows.length - 1;
 
         let anomalies = 0;
 
@@ -27,9 +31,7 @@ app.get("/analyze", (req, res) => {
 
             const requestCount = parseInt(cols[6]);
 
-            if (requestCount > 300) {
-                anomalies++;
-            }
+            if (requestCount > 300) anomalies++;
 
         }
 
