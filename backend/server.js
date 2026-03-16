@@ -1,22 +1,52 @@
 const express = require("express");
 const cors = require("cors");
-const { exec } = require("child_process");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 
-app.use(cors({ origin: "*" }));
+app.use(cors());
 
 app.get("/analyze", (req, res) => {
 
-    exec("python ../ml-model/predict.py", (error, stdout, stderr) => {
+    try {
 
-        if (error) {
-            return res.send("Error running AI model");
+        const filePath = path.join(__dirname, "../data/network_logs.csv");
+
+        const file = fs.readFileSync(filePath, "utf8");
+
+        const rows = file.trim().split("\n");
+
+        const total = rows.length - 1; // remove header
+
+        let anomalies = 0;
+
+        for (let i = 1; i < rows.length; i++) {
+
+            const cols = rows[i].split(",");
+
+            const requestCount = parseInt(cols[6]);
+
+            if (requestCount > 300) {
+                anomalies++;
+            }
+
         }
 
-        res.send(stdout);
+        const normal = total - anomalies;
 
-    });
+        res.json({
+            total,
+            anomalies,
+            normal
+        });
+
+    } catch (err) {
+
+        console.error(err);
+        res.status(500).send("Server error");
+
+    }
 
 });
 
