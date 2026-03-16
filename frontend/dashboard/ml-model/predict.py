@@ -2,11 +2,8 @@ import pandas as pd
 import joblib
 import json
 
-# Load trained model
-model = joblib.load("ml-model/anomaly_model.pkl")
-
-# Load logs
-data = pd.read_csv("data/network_logs.csv")
+model = joblib.load("../ml-model/anomaly_model.pkl")
+data = pd.read_csv("../data/network_logs.csv")
 
 # Select features
 features = data[["port", "packet_size", "request_count"]]
