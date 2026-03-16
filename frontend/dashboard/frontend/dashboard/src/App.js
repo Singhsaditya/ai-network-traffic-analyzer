@@ -11,25 +11,23 @@ function App() {
   const [normal, setNormal] = useState(0);
   const [total, setTotal] = useState(0);
 
-  const fetchData = async () => {
-    try {
+ const fetchData = async () => {
+  try {
 
-      const response = await axios.get(
-        "https://ai-network-traffic-analyzer.onrender.com/analyze"
-      );
+    const res = await fetch(
+      "https://ai-network-traffic-analyzer.onrender.com/analyze"
+    );
 
-      console.log("API DATA:", response.data);
+    const data = await res.json();
 
-      setAnomalies(response.data.anomalies);
-      setNormal(response.data.normal);
-      setTotal(response.data.total);
+    setAnomalies(data.anomalies);
+    setNormal(data.normal);
+    setTotal(data.total);
 
-    } catch (error) {
-
-      console.error("API ERROR:", error);
-
-    }
-  };
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   useEffect(() => {
 
