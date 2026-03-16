@@ -12,25 +12,23 @@ function App() {
   const [total, setTotal] = useState(0);
 
   const fetchData = async () => {
-
     try {
 
-      const res = await axios.get(
+      const response = await axios.get(
         "https://ai-network-traffic-analyzer.onrender.com/analyze"
       );
 
-      console.log("API RESPONSE:", res.data);
+      console.log("API DATA:", response.data);
 
-      setAnomalies(res.data.anomalies);
-      setNormal(res.data.normal);
-      setTotal(res.data.total);
+      setAnomalies(response.data.anomalies);
+      setNormal(response.data.normal);
+      setTotal(response.data.total);
 
-    } catch (err) {
+    } catch (error) {
 
-      console.error("API ERROR:", err);
+      console.error("API ERROR:", error);
 
     }
-
   };
 
   useEffect(() => {
@@ -43,7 +41,7 @@ function App() {
     labels: ["Normal Traffic", "Suspicious Traffic"],
     datasets: [
       {
-        label: "Traffic",
+        label: "Traffic Distribution",
         data: [normal, anomalies],
         backgroundColor: ["#36A2EB", "#FF6384"]
       }
@@ -51,7 +49,6 @@ function App() {
   };
 
   return (
-
     <div style={{ padding: "40px", fontFamily: "Arial" }}>
 
       <h1>AI Network Traffic Analyzer</h1>
@@ -71,9 +68,7 @@ function App() {
       </div>
 
     </div>
-
   );
-
 }
 
 export default App;
