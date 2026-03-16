@@ -7,20 +7,30 @@ ChartJS.register(BarElement, CategoryScale, LinearScale);
 
 function App() {
 
-  const [result, setResult] = useState("");
   const [anomalies, setAnomalies] = useState(0);
+  const [normal, setNormal] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const analyzeTraffic = async () => {
 
-    const response = await axios.get("https://ai-network-traffic-analyzer.onrender.com");
+    try {
 
-    setResult(response.data);
+      const response = await axios.get(
+        "https://ai-network-traffic-analyzer.onrender.com/analyze"
+      );
 
-    const match = response.data.match(/\d+/);
+      const data = response.data;
 
-    if (match) {
-      setAnomalies(parseInt(match[0]));
+      setAnomalies(data.anomalies);
+      setNormal(data.normal);
+      setTotal(data.total);
+
+    } catch (error) {
+
+      console.error("API error:", error);
+
     }
+
   };
 
   // AUTO REFRESH EVERY 5 SECONDS
@@ -41,45 +51,38 @@ function App() {
     datasets: [
       {
         label: "Traffic Analysis",
-        data: [1000 - anomalies, anomalies],
+        data: [normal, anomalies],
         backgroundColor: ["#36A2EB", "#FF6384"]
       }
     ]
   };
 
   return (
-    <div style={{padding:"40px",fontFamily:"Arial"}}>
+    <div style={{ padding: "40px", fontFamily: "Arial" }}>
 
       <h1>AI Network Traffic Analyzer</h1>
 
       <h3>Live Monitoring</h3>
 
-      <div style={{marginBottom:"30px"}}>
+      <div style={{ marginBottom: "30px" }}>
 
         <h2>Suspicious Activities Detected</h2>
 
         <div style={{
-          fontSize:"40px",
-          color:"#ff4444",
-          fontWeight:"bold"
+          fontSize: "40px",
+          color: "#ff4444",
+          fontWeight: "bold"
         }}>
           {anomalies}
         </div>
 
+        <p>Total Logs Processed: {total}</p>
+
       </div>
 
-      <div style={{width:"600px"}}>
+      <div style={{ width: "600px" }}>
         <Bar data={data} />
       </div>
-
-      <pre style={{
-        marginTop:"30px",
-        background:"#111",
-        color:"#0f0",
-        padding:"20px"
-      }}>
-        {result}
-      </pre>
 
     </div>
   );
