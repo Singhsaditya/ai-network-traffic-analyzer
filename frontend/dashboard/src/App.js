@@ -12,7 +12,7 @@ function App() {
 
   const analyzeTraffic = async () => {
 
-    const response = await axios.get("http://localhost:5000/analyze");
+    const response = await axios.get("https://ai-network-traffic-analyzer.onrender.com");
 
     setResult(response.data);
 
