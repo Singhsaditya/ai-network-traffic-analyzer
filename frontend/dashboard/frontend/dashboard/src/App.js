@@ -14,18 +14,18 @@ function App() {
  const fetchData = async () => {
   try {
 
-    const res = await fetch(
+    const response = await axios.get(
       "https://ai-network-traffic-analyzer.onrender.com/analyze"
     );
 
-    const data = await res.json();
+    const data = response.data;
 
     setAnomalies(data.anomalies);
     setNormal(data.normal);
     setTotal(data.total);
 
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
