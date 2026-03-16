@@ -11,19 +11,23 @@ function App() {
   const [normal, setNormal] = useState(0);
   const [total, setTotal] = useState(0);
 
-  const analyzeTraffic = async () => {
+  const fetchData = async () => {
 
     try {
 
-      const response = await axios.get("http://localhost:5000/analyze");
+      const res = await axios.get(
+        "https://ai-network-traffic-analyzer.onrender.com/analyze"
+      );
 
-      setAnomalies(response.data.anomalies);
-      setNormal(response.data.normal);
-      setTotal(response.data.total);
+      console.log("API RESPONSE:", res.data);
 
-    } catch (error) {
+      setAnomalies(res.data.anomalies);
+      setNormal(res.data.normal);
+      setTotal(res.data.total);
 
-      console.error("Backend connection error");
+    } catch (err) {
+
+      console.error("API ERROR:", err);
 
     }
 
@@ -31,15 +35,7 @@ function App() {
 
   useEffect(() => {
 
-    analyzeTraffic();
-
-    const interval = setInterval(() => {
-
-      analyzeTraffic();
-
-    }, 5000);
-
-    return () => clearInterval(interval);
+    fetchData();
 
   }, []);
 
@@ -47,7 +43,7 @@ function App() {
     labels: ["Normal Traffic", "Suspicious Traffic"],
     datasets: [
       {
-        label: "Traffic Distribution",
+        label: "Traffic",
         data: [normal, anomalies],
         backgroundColor: ["#36A2EB", "#FF6384"]
       }
@@ -55,34 +51,29 @@ function App() {
   };
 
   return (
+
     <div style={{ padding: "40px", fontFamily: "Arial" }}>
 
       <h1>AI Network Traffic Analyzer</h1>
 
       <h3>Live Monitoring</h3>
 
-      <div style={{ marginBottom: "30px" }}>
+      <h2>Suspicious Activities Detected</h2>
 
-        <h2>Suspicious Activities Detected</h2>
-
-        <div style={{
-          fontSize: "40px",
-          color: "#ff4444",
-          fontWeight: "bold"
-        }}>
-          {anomalies}
-        </div>
-
-        <p>Total Logs Processed: {total}</p>
-
+      <div style={{ fontSize: "40px", color: "red", fontWeight: "bold" }}>
+        {anomalies}
       </div>
+
+      <p>Total Logs Processed: {total}</p>
 
       <div style={{ width: "600px" }}>
         <Bar data={data} />
       </div>
 
     </div>
+
   );
+
 }
 
 export default App;
