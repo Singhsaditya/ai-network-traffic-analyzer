@@ -8,7 +8,7 @@ app.use(cors({ origin: "*" }));
 
 app.get("/analyze", (req, res) => {
 
-    exec("python ml-model/predict.py", (error, stdout, stderr) => {
+    exec("python ../ml-model/predict.py", (error, stdout, stderr) => {
 
         if (error) {
             return res.send("Error running AI model");

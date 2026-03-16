@@ -2,10 +2,10 @@ import pandas as pd
 import joblib
 
 # Load trained model
-model = joblib.load("ml-model/anomaly_model.pkl")
+model = joblib.load("../ml-model/anomaly_model.pkl")
 
 # Load network logs
-data = pd.read_csv("data/network_logs.csv")
+data = pd.read_csv("../data/network_logs.csv")
 
 # Select features used during training
 features = data[["port", "packet_size", "request_count"]]
