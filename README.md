@@ -42,4 +42,4 @@ React Dashboard → Node API → Python ML Model → Network Logs → Prediction
 4. Suspicious activities are detected.
 5. Results are returned to the React dashboard for visualization.
 
-## Sample Output
+
