@@ -4,7 +4,7 @@ const { exec } = require("child_process");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: "*" }));
 
 app.get("/analyze", (req, res) => {
 
